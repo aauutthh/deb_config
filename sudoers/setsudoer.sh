@@ -39,7 +39,7 @@ create_user() {
     chmod 600 $userfile
 
     cat <<EOF > $userfile
-$DEBMAGIC
+# $DEBMAGIC
 $user ALL=(ALL) ALL
 $user ALL=(root) NOPASSWD: SUDOCMD
 EOF
