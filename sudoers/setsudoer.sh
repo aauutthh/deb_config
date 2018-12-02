@@ -6,6 +6,7 @@ CURDIR=sudoers
 DEBMAGIC=THIS_IS_GEN_BY_SCRIPT_github.com/aauutthh/deb_config.git
 
 user=$1
+nopasswdlst=$2
 nopassfile=/etc/sudoers.d/nopassfile
 userfile=/etc/sudoers.d/$user
 
@@ -16,15 +17,25 @@ if [ ! -z "$DEBUGING" ] ; then
 fi
 
 
-create_nopass() {
+cat_nopasslst()
+{
+if [ ! -z "$nopasslst" -a -e $nopasslst ] ; then
+    cat $nopassfile
+else
     gitcat ${CURDIR}/nopasswd.lst |
+fi
+}
+
+create_nopass() {
+    echo -n "Cmnd_Alias SUDOCMD = "
+    cat_nopasswdlst |
         while read cmd
         do
             which $cmd
         done | 
-            perl -pe 's/\s*$/,/'
+            perl -pe 's/\s*$/, /'
+    echo " /bin/ls" > $nopassfile
 
-     echo "Cmnd_Alias SUDOCMD = "
 }
 
 create_user() {
