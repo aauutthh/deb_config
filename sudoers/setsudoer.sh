@@ -26,6 +26,7 @@ fi
 }
 
 create_nopass() {
+    echo "regenerate " $nopassfile
     echo -n "Cmnd_Alias SUDOCMD = " > $nopassfile
     cat_nopasswdlst |
         while read cmd
@@ -42,7 +43,10 @@ create_user() {
     if [ -e $userfile ] ; then
         grep $DEBMAGIC $userfile >/dev/null 2>&1
         if [ $? -ne 0 ]; then
-            mv $userfile $userfile.`date +%Y%m%d-%s`
+            rfile=$userfile.`date +%Y%m%d-%s`
+            mv $userfile $rfile
+            perl -pi -e 's/^/#byscript# /' $rfile
+            echo "mv " $userfile "to" $rfile
         fi
     fi
 
