@@ -1,0 +1,8 @@
+gitdir=/home/daniel/gits/github/myproject/deb_config
+debugdir=/data/test/deb_conf_test
+mkdir -p $debugdir
+cd $debugdir
+rm -Rf *
+ln -s $gitdir/sh
+ln -s $gitdir/debugrc
+ln -s $gitdir/nodebugrc

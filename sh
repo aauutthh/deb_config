@@ -46,18 +46,23 @@ fi
 
 
 util=/tmp/.$PROGIT.util
-cat <<'EOF'  > $util
+export REV=origin/master
+if [ ! -z $DEB_CONFIG_DEBUG_REV ] ; then
+    REV=$DEB_CONFIG_DEBUG_REV
+fi
+cat <<-EOF  > $util
 gitcat () {
-  if [ $# -gt 0 ] ; then
-    git --git-dir=${PROGIT} show origin/master:$1
+  if [ \$# -gt 0 ] ; then
+    git --git-dir=${PROGIT} show ${REV}:\$1
   fi
 }
 EOF
 
-sed -i -e "s/\${PROGIT}/$PROGIT/g" $util
+#sed -i -e "s/\${PROGIT}/$PROGIT/g" $util
+#sed -i -e "s/\${REV}/$REV/g" $util
 
 (echo "set -- ${ARGV[@]} " '$@' ;
 echo ". $util" ;
-git --git-dir=$PROGIT show origin/master:$script ) | /bin/bash
+git --git-dir=$PROGIT show ${REV}:$script ) | /bin/bash
 
 rm $util

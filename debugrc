@@ -1,1 +1,2 @@
 export DEB_CONFIG_DEBUG_URL=/home/daniel/gits/github/myproject/deb_config/.git
+export DEB_CONFIG_DEBUG_REV=1816582265e5e738a293335359bfec73c6998e9e
