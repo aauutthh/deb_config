@@ -17,7 +17,7 @@ if [ ! -z "$DEBUGING" ] ; then
 fi
 
 
-cat_nopasslst() {
+cat_nopasswdlst() {
 if [ ! -z "$nopasslst" -a -e $nopasslst ] ; then
     cat $nopassfile
 else
