@@ -29,7 +29,7 @@ create_nopass() {
 
 create_user() {
     if [ -e $userfile ] ; then
-        grep $DEBMAGIC $userfile >/dev/null 2>&1
+        grep $DEBMAGIC $userfile #>/dev/null 2>&1
         if [ $? ]; then
             mv $userfile $userfile.`date +%Y%m%d-%s`
         fi
