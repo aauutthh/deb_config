@@ -21,7 +21,7 @@ create_nopass() {
         do
             which $cmd
         done | 
-            sed -e 's/\s*$/,/g'
+            perl -pe 's/\s*$/,/g'
 
      echo "Cmnd_Alias SUDOCMD = "
 }
