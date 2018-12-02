@@ -21,8 +21,20 @@ else
 fi
 
 [ -z "$D_RUN_ALREADY" ] || { echo "recursive call"; exit; }
- 
+
+util=/tmp/.$PROGIT.util
+cat <<'EOF'  > $util
+gitcat () {
+  if [ $# -gt 0 ] ; then
+    git --git-dir=${PROGIT} show origin/master:$1
+  fi
+}
+EOF
+
+sed -i -e "s/\${PROGIT}/$PROGIT/g" $util
 
 (echo "set -- ${ARGV[@]} " '$@' ;
+echo ". $util" ;
 git --git-dir=$PROGIT show origin/master:$script ) | /bin/bash
 
+rm $util
