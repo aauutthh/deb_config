@@ -32,8 +32,9 @@ create_nopass() {
         do
             which $cmd
         done | 
-            perl -pe 's/\s*$/, /'
-    echo " /bin/ls" > $nopassfile
+            perl -pe 's/\s*$/, /' > $nopassfile
+    echo " /bin/ls" >> $nopassfile
+    cat $nopassfile
 
 }
 
