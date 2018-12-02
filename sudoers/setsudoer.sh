@@ -9,9 +9,9 @@ nopassfile=/etc/sudoers.d/nopassfile
 userfile=/etc/sudoers.d/$user
 
 if [ ! -z "$DEBUGING" ] ; then
-    mkdir -p /tmp/sudoers.d
     nopassfile=/tmp/$nopassfile
     userfile=/tmp/$userfile
+    mkdir -p `dirname $nopassfile`
 fi
 
 
@@ -21,7 +21,7 @@ create_nopass() {
         do
             which $cmd
         done | 
-            sed -e 's/\s*$/,/' 
+            sed -e 's/\s*$/,/g'
 
      echo "Cmnd_Alias SUDOCMD = "
 }
