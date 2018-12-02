@@ -22,7 +22,7 @@ cat_nopasslst()
 if [ ! -z "$nopasslst" -a -e $nopasslst ] ; then
     cat $nopassfile
 else
-    gitcat ${CURDIR}/nopasswd.lst |
+    gitcat ${CURDIR}/nopasswd.lst 
 fi
 }
 
