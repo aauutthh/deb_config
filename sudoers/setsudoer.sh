@@ -26,15 +26,15 @@ fi
 }
 
 create_nopass() {
-    echo -n "Cmnd_Alias SUDOCMD = "
+    echo -n "Cmnd_Alias SUDOCMD = " > $nopassfile
     cat_nopasswdlst |
         while read cmd
         do
             which $cmd
         done | 
-            perl -pe 's/\s*$/, /' > $nopassfile
+            perl -pe 's/\s*$/, /' >> $nopassfile
     echo " /bin/ls" >> $nopassfile
-    cat $nopassfile
+    chmod 600 $nopassfile
 
 }
 
