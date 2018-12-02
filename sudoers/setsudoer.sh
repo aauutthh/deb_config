@@ -1,5 +1,4 @@
 #!/bin/bash
-exit
 export PATH=$PATH:/usr/sbin/:/sbin/
 CURDIR=sudoers
 
