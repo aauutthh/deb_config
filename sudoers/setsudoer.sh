@@ -3,6 +3,7 @@ export PATH=$PATH:/usr/sbin/:/sbin/
 CURDIR=sudoers
 
 [ $# -lt 1 ] && echo "arg username needed" &&  exit
+DEBMAGIC=THIS_IS_GEN_BY_SCRIPT_github.com/aauutthh/deb_config.git
 
 user=$1
 nopassfile=/etc/sudoers.d/nopassfile
@@ -38,10 +39,11 @@ create_user() {
     chmod 600 $userfile
 
     cat <<EOF > $userfile
+$DEBMAGIC
 $user ALL=(ALL) ALL
 $user ALL=(root) NOPASSWD: SUDOCMD
 EOF
 }
 
-create_user
 create_nopass
+create_user
