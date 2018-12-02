@@ -53,6 +53,7 @@ create_user() {
     touch $userfile
     chmod 600 $userfile
 
+    echo "regenerate " $userfile
     cat <<EOF > $userfile
 # $DEBMAGIC
 $user ALL=(ALL) ALL
