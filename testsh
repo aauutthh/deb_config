@@ -1,2 +1,3 @@
 set |grep 'PRO'
+echo $#
 echo $@
