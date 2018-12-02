@@ -1,4 +1,5 @@
 #!/bin/bash
+exit
 export PATH=$PATH:/usr/sbin/:/sbin/
 CURDIR=sudoers
 
@@ -21,7 +22,7 @@ create_nopass() {
         do
             which $cmd
         done | 
-            perl -pe 's/\s*$/,/g'
+            perl -pe 's/\s*$/,/'
 
      echo "Cmnd_Alias SUDOCMD = "
 }
