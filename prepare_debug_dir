@@ -1,10 +1,22 @@
-gitdir=${HOME}/gits/github/myproject/deb_config
+#!/bin/bash
+pth=`readlink -f $0`
+gitdir=`dirname $pth`
 debugdir=${HOME}/test/deb_conf_test
+
 rm -Rf $debugdir
 mkdir -p $debugdir
-cd $debugdir
-ln -s $gitdir/sh
-ln -s $gitdir/debugrc
-ln -s $gitdir/nodebugrc
+
+ln -s $gitdir/sh $debugdir/sh
+ln -s $gitdir/testsh $debugdir/testsh2
+
+cat << EOF > $debugdir/debugrc
+export DEB_CONFIG_DEBUG_URL=$gitdir/.git
+export DEB_CONFIG_DEBUG_REV=origin/master
+EOF
+
+cat << EOF > $debugdir/nodebugrc
+unset DEB_CONFIG_DEBUG_URL
+unset DEB_CONFIG_DEBUG_REV
+EOF
 
 echo cd $debugdir

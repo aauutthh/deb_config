@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # entry of the script
 # check arguments
@@ -16,15 +16,19 @@ clone_bare_git() {
     progurl=$1
     if [ ! -d $PROGIT ] ; then
         git clone --bare $progurl
-        cd $PROGIT
+        echo -n "dir change  : "
+        pushd $PROGIT 
         git config --add remote.origin.url $progurl
         git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
         git fetch 
-        cd -
+        echo -n "backto : "
+        popd
     else
-        cd $PROGIT
+        echo -n "dir change  : "
+        pushd $PROGIT 
         git fetch 
-        cd -
+        echo -n "backto : "
+        popd
     fi
 }
 
@@ -33,8 +37,16 @@ entry_check $@
 export PROJECT=deb_config
 export PROGIT=${PROJECT}.git
 script=$1
-shift
-export ARGV=$@
+while [ $# -gt 0 ] ; do
+    if [ "$1" == "--" ] ; then
+        shift
+        break
+    fi
+    shift
+done
+#declare ARGV=($@)
+echo "parse args to script<$script>:" $@
+
 PROURL=https://github.com/aauutthh/${PROGIT}
 
 if [ -z $DEB_CONFIG_DEBUG_URL ] ; then
@@ -56,13 +68,27 @@ gitcat () {
     git --git-dir=${PROGIT} show ${REV}:\$1
   fi
 }
+# 取commitid
+gitsid() {
+  git --git-dir=${PROGIT} log -1 --format="%h" -- \$1
+}
 EOF
 
-#sed -i -e "s/\${PROGIT}/$PROGIT/g" $util
-#sed -i -e "s/\${REV}/$REV/g" $util
+. $util
 
-(echo "set -- ${ARGV[@]} " '$@' ;
-echo ". $util" ;
-git --git-dir=$PROGIT show ${REV}:$script ) | /bin/bash
+# 如果脚本存在于仓库则用仓库的脚本，否则使用本地脚本
+catscript() {
+    commit=`gitsid $1`
+    if [ -n "${commit}" ] ; then
+        gitcat $1
+    else
+        if [ -n "$DEBUGING" ] ; then
+            cat $1
+        fi
+    fi
+}
+
+(echo ". $util" ;
+catscript $script ) | /bin/bash -s -- $@
 
 rm $util
