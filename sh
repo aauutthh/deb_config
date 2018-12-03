@@ -36,7 +36,8 @@ clone_bare_git() {
 entry_check $@
 export PROJECT=deb_config
 export PROGIT=${PROJECT}.git
-script=$1
+export PROURL=https://github.com/aauutthh/${PROGIT}
+export SCRIPT=$1
 while [ $# -gt 0 ] ; do
     if [ "$1" == "--" ] ; then
         shift
@@ -45,9 +46,8 @@ while [ $# -gt 0 ] ; do
     shift
 done
 #declare ARGV=($@)
-echo "parse args to script<$script>:" $@
+echo "parse args to script<$SCRIPT>:" $@
 
-PROURL=https://github.com/aauutthh/${PROGIT}
 
 if [ -z $DEB_CONFIG_DEBUG_URL ] ; then
   clone_bare_git $PROURL
@@ -57,22 +57,27 @@ else
 fi
 
 
-util=/tmp/.$PROGIT.util
 export REV=origin/master
 if [ ! -z $DEB_CONFIG_DEBUG_REV ] ; then
     REV=$DEB_CONFIG_DEBUG_REV
 fi
-cat <<-EOF  > $util
+
+sid=`git --git-dir=${PROGIT} log -1 --format="%h" ${REV} -- sh`
+
+util=/tmp/util.$PROGIT.$sid
+if [ ! -e $util ]  ; then
+cat <<'EOF'  > $util
 gitcat () {
-  if [ \$# -gt 0 ] ; then
-    git --git-dir=${PROGIT} show ${REV}:\$1
+  if [ $# -gt 0 ] ; then
+    git --git-dir=${PROGIT} show ${REV}:$1
   fi
 }
 # 取commitid
 gitsid() {
-  git --git-dir=${PROGIT} log -1 --format="%h" -- \$1
+  git --git-dir=${PROGIT} log -1 --format="%h" ${REV} -- $1
 }
 EOF
+fi
 
 . $util
 
@@ -88,7 +93,8 @@ catscript() {
     fi
 }
 
+# 如果执行的是二进制文件?
 (echo ". $util" ;
-catscript $script ) | /bin/bash -s -- $@
+catscript $SCRIPT ) | /bin/bash -s -- $@
 
-rm $util
+#rm $util
