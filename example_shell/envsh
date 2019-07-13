@@ -1,6 +1,7 @@
 #!/bin/bash
 set |grep -E 'PRO|DEB_CONFIG|DEBUG'
 echo $D_RUN_ALREADY
+echo "REV:" $REV
 echo argc: $#
 echo argv: $@
 echo "\$0: "$0
